@@ -57,10 +57,12 @@
         return trigger.html(triggerHtml);
       };
       sel.on('blur.fs', function() {
-        if (trigger.hasClass('open')) {
+        if (trigger.hasClass('open') && !trigger.hasClass('active')) {
           return setTimeout(function() {
             return trigger.trigger('close.fs');
           }, 120);
+        } else {
+          sel.focus();
         }
       });
       trigger.on('close.fs', function() {
@@ -174,6 +176,14 @@
       });
       options.on('mouseleave.fs', 'li', function() {
         return options.find('.hover').removeClass('hover');
+      });
+      options.on('mouseenter.fs', function() {
+        var active;
+        active = options.prev('.trigger');
+        return active.addClass('active');
+      });
+      options.on('mouseleave.fs', function() {
+        return options.prev('.active').removeClass('active');
       });
       copyOptionsToList = function() {
         var selOpts;
