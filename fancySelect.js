@@ -57,10 +57,12 @@
         return trigger.html(triggerHtml);
       };
       sel.on('blur.fs', function() {
-        if (trigger.hasClass('open')) {
+        if (trigger.hasClass('open') && !options.is(':hover')) {
           return setTimeout(function() {
             return trigger.trigger('close.fs');
           }, 120);
+        } else {
+          return sel.focus();
         }
       });
       trigger.on('close.fs', function() {
@@ -111,7 +113,7 @@
         }
       });
       sel.on('keydown', function(e) {
-        var hovered, newHovered, w;
+        var hovered, newHovered, w, optul;
         w = e.which;
         hovered = options.find('.hover');
         hovered.removeClass('hover');
@@ -158,12 +160,14 @@
         clicked = $(this);
         sel.val(clicked.data('raw-value'));
         if (!isiOS) {
-          sel.trigger('blur.fs').trigger('focus.fs');
+          sel.trigger('close.fs').trigger('focus.fs');
         }
         options.find('.selected').removeClass('selected');
         clicked.addClass('selected');
         trigger.addClass('selected');
-        return sel.val(clicked.data('raw-value')).trigger('change.fs').trigger('blur.fs').trigger('focus.fs');
+        trigger.removeClass('open');
++       options.removeClass('open');
++       return sel.val(clicked.data('raw-value')).trigger('change.fs').trigger('close.fs').trigger('focus.fs');
       });
       options.on('mouseenter.fs', 'li', function() {
         var hovered, nowHovered;
